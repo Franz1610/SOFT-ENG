@@ -1,5 +1,7 @@
+// Ensure Bootstrap JS is loaded for carousel controls
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../css/app.css';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
