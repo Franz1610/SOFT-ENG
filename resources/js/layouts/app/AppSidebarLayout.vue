@@ -15,6 +15,7 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
+  <AppLayout>
     <AppShell variant="sidebar">
         <AppSidebar />
         <AppContent variant="sidebar" class="overflow-x-hidden">
@@ -22,4 +23,38 @@ withDefaults(defineProps<Props>(), {
             <slot />
         </AppContent>
     </AppShell>
+  </AppLayout>
 </template>
+
+<style scoped>
+/* Set the sidebar and content background to #FFFAE9 */
+:deep(.sidebar),
+:deep(.app-sidebar),
+:deep(.app-content),
+:deep(.app-shell) {
+    background-color: #FFFAE9 !important;
+    color: #344C34 !important;
+}
+
+/* Optional: update header background if needed */
+:deep(.app-sidebar-header) {
+    background-color: #FFFAE9 !important;
+    color: #344C34 !important;
+}
+
+/* Navbar styles */
+.navbar,
+.app-navbar {
+    background-color: #FFFAE9 !important;
+    color: #4b824b !important;
+    border-bottom: 2px solid #4b824b !important;
+}
+
+/* Header styles */
+.app-sidebar-header,
+.header {
+    background-color: #4b824b !important;
+    color: #FFFAE9 !important;
+    border-bottom: 2px solid #FFFAE9 !important;
+}
+</style>

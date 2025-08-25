@@ -165,3 +165,43 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Remove borders from sidebar, header, and main content */
+[data-sidebar="sidebar"],
+header,
+.relative,
+.min-h-100vh,
+.border,
+.border-sidebar-border,
+.rounded-xl {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Sidebar styles */
+[data-sidebar="sidebar"] {
+    background-color: #FFFAE9 !important;
+    color: #4b824b !important;
+}
+
+/* Sidebar header label */
+[data-sidebar="group-label"] {
+    color: #4b824b !important;
+}
+
+/* Sidebar links */
+[data-sidebar="menu-button"] {
+    color: #4b824b !important;
+}
+[data-sidebar="menu-button"][data-active="true"],
+[data-sidebar="menu-button"]:hover {
+    background-color: #4b824b !important;
+    color: #FFFAE9 !important;
+}
+
+/* Header styles */
+header {
+    background-color: #4b824b !important;
+    color: #FFFAE9 !important;
+    border-bottom: 2px solid #FFFAE9 !important;
+}

@@ -1,11 +1,10 @@
-
 <template>
   <div style="background: #232323; min-height: 100vh;">
     <header class="header sticky-header">
       <div class="header-inner">
         <div class="logo">WECOLLAB</div>
         <nav class="nav">
-          <a href="#" class="nav-link">Log in</a>
+          <a href="login" class="nav-link">Log in</a>
           <a href="#" class="nav-link">Deals & Promo</a>
           <a href="#" class="nav-link">What's NEW?</a>
           <a href="#" class="nav-link">Booking</a>
@@ -55,21 +54,73 @@
       </section>
 
       <!-- Reviews Section -->
-  <section class="reviews-section" style="background: #f4f3f2; padding: 64px 0 80px 0; display: flex; flex-direction: column; align-items: center;">
-        <h2 style="font-size: 2.5rem; font-weight: bold; color: #232323; margin-bottom: 48px;">REVIEWS</h2>
-
-            <div class="testimonial-slide d-flex align-items-center justify-content-center">
-              <img src="/images/review5.jpg" class="testimonial-profile rounded-circle" alt="Reviewer Five">
-              <div class="testimonial-info ms-3">
-                <div class="testimonial-name">Reviewer Five</div>
-                <div class="testimonial-rating mb-2">
-                  <span class="text-warning">★★★★☆</span>
-                  <span class="testimonial-date ms-2">5 days ago</span>
+      <section id="reviews" style="background: #f7f5ed; padding: 64px 0;">
+        <div style="max-width: 1100px; margin: 0 auto;">
+          <h2 style="text-align: center; font-size: 2.5rem; font-weight: bold; color: #232323; margin-bottom: 40px;">REVIEWS</h2>
+          <div class="carousel-wrapper" style="position: relative; overflow: visible;">
+            <!-- Carousel Slides -->
+            <div class="carousel-slides-container">
+              <div class="carousel-track" style="display: flex; align-items: center; justify-content: center;">
+                <div
+                  v-for="(review, idx) in visibleSlides"
+                  :key="idx"
+                  class="review-card"
+                  :style="getCardStyle(idx)"
+                >
+                  <template v-if="review">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                      <img :src="review.profile" alt="profile" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; margin-right: 12px; border: 2px solid #eee;">
+                      <div>
+                        <div style="font-weight: 600; font-size: 1.1rem;">{{ review.name }}</div>
+                        <div style="font-size: 0.95rem; color: #888;">1 review · 1 photo</div>
+                      </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                      <span v-for="n in 5" :key="n" style="color: #ffc107; font-size: 1.15rem;">★</span>
+                      <span style="font-size: 0.95rem; color: #888; margin-left: 8px;">{{ review.date }}</span>
+                    </div>
+                    <div style="font-size: 1.15rem; font-weight: 500; margin-bottom: 10px; margin-top: 8px;">“{{ review.text }}”</div>
+                    <img :src="review.photo" alt="review" style="width: 100%; height: 170px; object-fit: cover; border-radius: 10px; margin-top: 10px;">
+                  </template>
                 </div>
-                <div class="testimonial-text">“Would recommend to friends.”</div>
               </div>
             </div>
+            <!-- Carousel Controls and Dots Below -->
+            <div style="display: flex; flex-direction: column; align-items: center; margin-top: 32px;">
+              <div style="display: flex; align-items: center; gap: 32px;">
+                <button @click="prev"
+                  style="background: none; border: none; font-size: 2rem; color: #495846; cursor: pointer; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;"
+                  :disabled="currentIndex === 0"
+                  :style="{ opacity: currentIndex === 0 ? 0.4 : 1 }"
+                >
+                  <span>&larr;</span>
+                </button>
+                <div style="display: flex; gap: 12px;">
+                  <span v-for="(review, idx) in reviews" :key="idx"
+                    :style="{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      background: idx === currentIndex ? '#495846' : '#d2d2d2',
+                      display: 'inline-block',
+                      cursor: 'pointer'
+                    }"
+                    @click="goTo(idx)">
+                  </span>
+                </div>
+                <button @click="next"
+                  style="background: none; border: none; font-size: 2rem; color: #495846; cursor: pointer; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: background 0.2s;"
+                  :disabled="currentIndex === reviews.length - 1"
+                  :style="{ opacity: currentIndex === reviews.length - 1 ? 0.4 : 1 }"
+                >
+                  <span>&rarr;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
+      <!-- End Reviews Section -->
     </main>
   </div>
 </template>
@@ -383,4 +434,195 @@ section > .testimonial-slide {
     margin-left: 0;
   }
 }
+.carousel-slides-container {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Center the slides horizontally */
+  align-items: center;
+  overflow: visible;
+  position: relative;
+  margin-left: 0; /* Remove the margin hack */
+}
+.carousel-slides-viewport {
+  width: 100%;
+  max-width: 1100px;
+  overflow: hidden;
+  margin: 0 auto;
+  position: relative;
+  height: 420px; /* adjust as needed */
+}
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(.77,0,.18,1);
+  will-change: transform;
+}
+.review-card {
+  flex: 0 0 350px;
+  margin-left: -80px;
+  margin-right: -80px;
+}
+.carousel-track.next-anim {
+  animation: slide-next 0.4s cubic-bezier(.77,0,.18,1);
+}
+.carousel-track.prev-anim {
+  animation: slide-prev 0.4s cubic-bezier(.77,0,.18,1);
+}
+@keyframes slide-next {
+  0% { transform: translateX(60px); }
+  100% { transform: translateX(0); }
+}
+@keyframes slide-prev {
+  0% { transform: translateX(-60px); }
+  100% { transform: translateX(0); }
+}
 </style>
+
+<script setup>
+import { ref, computed, nextTick } from 'vue'
+
+const reviews = [
+  {
+    name: 'Luis Palparan',
+    profile: 'https://randomuser.me/api/portraits/men/32.jpg',
+    text: 'Gwapo siya, ok lng.',
+    photo: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80',
+    date: '1 week ago'
+  },
+  {
+    name: 'Hanz Regalado',
+    profile: 'https://randomuser.me/api/portraits/men/45.jpg',
+    text: 'Very minimalist',
+    photo: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+    date: '3 days ago'
+  },
+  {
+    name: 'Julianne Casia',
+    profile: 'https://randomuser.me/api/portraits/women/65.jpg',
+    text: 'A new generation of co-working.',
+    photo: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
+    date: '2 days ago'
+  },
+  {
+    name: 'John Doe',
+    profile: 'https://randomuser.me/api/portraits/men/12.jpg',
+    text: 'Great place for studying.',
+    photo: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80',
+    date: '1 week ago'
+  },
+  {
+    name: 'Maria Santos',
+    profile: 'https://randomuser.me/api/portraits/women/44.jpg',
+    text: 'Love the ambiance and coffee!',
+    photo: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
+    date: '5 days ago'
+  }
+]
+
+const currentIndex = ref(2) // Start at the middle
+
+const CARD_WIDTH = 350
+const CARD_MARGIN = -80
+const VISIBLE_SLIDES = 5
+const CENTER_INDEX = Math.floor(VISIBLE_SLIDES / 2)
+
+const visibleSlides = computed(() => {
+  const slides = []
+  const total = reviews.length
+  for (let i = -2; i <= 2; i++) {
+    // Always wrap around for infinite effect, no empty slots
+    let idx = (currentIndex.value + i + total) % total
+    slides.push(reviews[idx])
+  }
+  return slides
+})
+
+const isAnimating = ref(false)
+const animationDirection = ref('') // 'next' or 'prev'
+
+const trackStyle = computed(() => {
+  // Calculate the offset so the selected card is always centered
+  let translateX = (currentIndex.value - CENTER_INDEX) * (CARD_WIDTH + CARD_MARGIN)
+  // For infinite loop, wrap around
+  if (currentIndex.value < CENTER_INDEX) {
+    translateX = 0
+  }
+  if (currentIndex.value > reviews.length - CENTER_INDEX - 1) {
+    translateX = (reviews.length - VISIBLE_SLIDES) * (CARD_WIDTH + CARD_MARGIN)
+  }
+  return {
+    transform: `translateX(-${translateX}px)`
+  }
+})
+
+function animate(direction) {
+  if (isAnimating.value) return
+  isAnimating.value = true
+  animationDirection.value = direction
+  setTimeout(() => {
+    isAnimating.value = false
+    animationDirection.value = ''
+  }, 400) // match transition duration
+}
+
+function prev() {
+  currentIndex.value = (currentIndex.value - 1 + reviews.length) % reviews.length
+}
+function next() {
+  currentIndex.value = (currentIndex.value + 1) % reviews.length
+}
+function goTo(idx) {
+  currentIndex.value = idx
+}
+
+function getCardStyle(idx) {
+  const diff = idx - 2 // 2 is the center index for 5 cards
+  const base = {
+    minWidth: '350px',
+    maxWidth: '350px',
+    background: '#fff',
+    borderRadius: '18px',
+    boxShadow: '0 2px 12px rgba(0,0,0,0.10)',
+    padding: '24px 18px',
+    position: 'relative',
+    zIndex: 1,
+    marginLeft: '-80px',
+    marginRight: '-80px',
+    opacity: 0.5,
+    transform: 'scale(0.92) translateY(30px)',
+    transition: 'all 0.35s cubic-bezier(.77,0,.18,1)'
+  }
+  if (diff === 0) {
+    return {
+      ...base,
+      zIndex: 3,
+      opacity: 1,
+      marginLeft: '0',
+      marginRight: '0',
+      transform: 'scale(1.08) translateY(0px)',
+      boxShadow: '0 8px 32px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.10)'
+    }
+  }
+  if (Math.abs(diff) === 1) {
+    return {
+      ...base,
+      zIndex: 2,
+      opacity: 0.8,
+      transform: 'scale(0.98) translateY(12px)'
+    }
+  }
+  if (Math.abs(diff) === 2) {
+    return {
+      ...base,
+      zIndex: 1,
+      opacity: 0.5,
+      transform: 'scale(0.92) translateY(30px)'
+    }
+  }
+  // Hide cards outside the visible 5 (shouldn't happen)
+  return {
+    ...base,
+    opacity: 0,
+    pointerEvents: 'none'
+  }
+}
+</script>
