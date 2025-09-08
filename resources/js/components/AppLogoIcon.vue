@@ -13,4 +13,5 @@ defineProps<Props>();
 </script>
 
 <template>
+    <span></span>
 </template>

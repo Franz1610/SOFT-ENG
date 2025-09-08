@@ -477,7 +477,7 @@ section > .testimonial-slide {
 }
 </style>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, nextTick } from 'vue'
 
 const reviews = [
@@ -539,30 +539,9 @@ const visibleSlides = computed(() => {
 const isAnimating = ref(false)
 const animationDirection = ref('') // 'next' or 'prev'
 
-const trackStyle = computed(() => {
-  // Calculate the offset so the selected card is always centered
-  let translateX = (currentIndex.value - CENTER_INDEX) * (CARD_WIDTH + CARD_MARGIN)
-  // For infinite loop, wrap around
-  if (currentIndex.value < CENTER_INDEX) {
-    translateX = 0
-  }
-  if (currentIndex.value > reviews.length - CENTER_INDEX - 1) {
-    translateX = (reviews.length - VISIBLE_SLIDES) * (CARD_WIDTH + CARD_MARGIN)
-  }
-  return {
-    transform: `translateX(-${translateX}px)`
-  }
-})
 
-function animate(direction) {
-  if (isAnimating.value) return
-  isAnimating.value = true
-  animationDirection.value = direction
-  setTimeout(() => {
-    isAnimating.value = false
-    animationDirection.value = ''
-  }, 400) // match transition duration
-}
+
+
 
 function prev() {
   currentIndex.value = (currentIndex.value - 1 + reviews.length) % reviews.length
