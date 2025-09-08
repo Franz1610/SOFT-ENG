@@ -1,3 +1,14 @@
+/* Override for login and signup background image */
+.auth-bg-override, .auth-bg-override * {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+body.auth-bg-override {
+    background: url('/imageSystem/login-bg.png') center/cover no-repeat !important;
+    min-height: 100vh;
+    width: 100vw;
+    background-attachment: fixed;
+}
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
