@@ -549,11 +549,11 @@ function prev() {
 function next() {
   currentIndex.value = (currentIndex.value + 1) % reviews.length
 }
-function goTo(idx) {
+function goTo(idx: number) {
   currentIndex.value = idx
 }
 
-function getCardStyle(idx) {
+function getCardStyle(idx: number) {
   const diff = idx - 2 // 2 is the center index for 5 cards
   const base = {
     minWidth: '350px',
@@ -562,7 +562,7 @@ function getCardStyle(idx) {
     borderRadius: '18px',
     boxShadow: '0 2px 12px rgba(0,0,0,0.10)',
     padding: '24px 18px',
-    position: 'relative',
+    position: 'relative' as const,
     zIndex: 1,
     marginLeft: '-80px',
     marginRight: '-80px',
@@ -601,7 +601,7 @@ function getCardStyle(idx) {
   return {
     ...base,
     opacity: 0,
-    pointerEvents: 'none'
+    pointerEvents: 'none' as const
   }
 }
 </script>
